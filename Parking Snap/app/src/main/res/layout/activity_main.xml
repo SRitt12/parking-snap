@@ -23,6 +23,6 @@
         android:layout_weight="1"
         android:alpha=".76"
         android:background="#C5E3E2"
-        android:text="Capture" />
+        android:text="Open Camera" />
 
 </LinearLayout>
