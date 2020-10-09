@@ -1,19 +1,56 @@
 package com.sritt.parkingsnap;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.view.PreviewView;
 
 public class MainActivity extends AppCompatActivity {
     //private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-    PreviewView previewView = findViewById(R.id.previewView);
+    //PreviewView previewView = findViewById(R.id.previewView);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+
+        /*We can create a button that when clicked opens up the phone camera and takes a snap
+        and stores that image in a image view
+         */
+        Button cameraBTN = findViewById(R.id.cameraBTN);
+        cameraBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                startActivityForResult(intent, 0);
+            }
+        });
+
+
+
+    }
+
+    /*
+    store the picture in an image view
+     */
+
+    @Override
+    protected void onActivityResult(int resultCode, int requestCode, Intent intent) {
+        super.onActivityResult(resultCode, requestCode, intent);
+        ImageView myIV = findViewById(R.id.myIV);
+
+        Bitmap myBM =(Bitmap) intent.getExtras().get("data");
+        myIV.setImageBitmap(myBM);
+
 
     }
 
@@ -39,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview);
     }*/
+
+
 
 
 }
