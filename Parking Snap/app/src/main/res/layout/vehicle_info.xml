@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:alpha="0.79"
     android:backgroundTint="#2AB630"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".VehicleInfo">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/infoRV"
