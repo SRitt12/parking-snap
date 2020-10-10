@@ -36,6 +36,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        Button info = findViewById(R.id.infoBTN);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent ini = new Intent(MainActivity.this, VehicleInfo.class);
+                startActivity(ini);
+
+            }
+        });
+
+
 
     }
 
@@ -76,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
 
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview);
     }*/
+
+
+
+
+
 
 
 
