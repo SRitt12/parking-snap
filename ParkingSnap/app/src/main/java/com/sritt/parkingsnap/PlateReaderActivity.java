@@ -4,8 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -15,6 +21,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -23,18 +31,56 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 
+import java.net.Inet4Address;
+import java.util.ArrayList;
+
 public class PlateReaderActivity extends AppCompatActivity {
     private static final String TAG = "ErrorLog";
+    static String platenum ="";
+    public static String getPlatenum(){
+        return platenum;
+    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plate_reader);
+        Vehicle test = new Vehicle("TestF", "TestL","XD1E0W", "2020", "Test", "Test","Red");
+        ListActivity.vehicles.put("XD1E0W", test);
+        int requestCode = 1;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED);
+        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, requestCode);
     }
     // onClick for button
     public void openCam (View view){
         dispatchTakePictureIntent();
+    }
+
+    public void checkPlate(View view){
+        if(ListActivity.vehicles.containsKey(platenum)) {
+            Context context = getApplicationContext();
+            CharSequence text = "Plate " + platenum + "is in the database";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+
+        }
+        else{
+            PlateDialogFragment plateDF = new PlateDialogFragment();
+            plateDF.show(getSupportFragmentManager(), "TAG");
+        }
+    }
+
+
+    public void toNewVehicle(View view){
+        Intent tonNewVehicleIntent = new Intent(this, NewVehicleActivity.class);
+        startActivity(tonNewVehicleIntent);
+    }
+    public void toList(View view){
+        Intent toListIntent = new Intent(this, ListActivity.class);
+        startActivity(toListIntent);
     }
 
     // Sends intent to open camera for initial image capture
@@ -65,9 +111,21 @@ public class PlateReaderActivity extends AppCompatActivity {
         }
     }
 
-    // TODO create regex to find plate number, create models for different states, pass plate number
-    //  off to create new vehicle instances
+    // TODO create models for different states
     private void recognizeText(InputImage image) {
+        ArrayList <String> months = new ArrayList<String>();
+        months.add("JAN");
+        months.add("FEB");
+        months.add("MAR");
+        months.add("APR");
+        months.add("MAY");
+        months.add("JUN");
+        months.add("JUL");
+        months.add("AUG");
+        months.add("SEP");
+        months.add("OCT");
+        months.add("NOV");
+        months.add("DEC");
         TextRecognizer recognizer = TextRecognition.getClient();
         Task<Text> result =
                 recognizer.process(image)
@@ -79,14 +137,17 @@ public class PlateReaderActivity extends AppCompatActivity {
                                 for (Text.TextBlock block : visionText.getTextBlocks()) {
                                     Rect boundingBox = block.getBoundingBox();
                                     Point[] cornerPoints = block.getCornerPoints();
-                                    String text = block.getText();
-                                    TextView imageTextTV = findViewById(R.id.imageTextTV);
-                                    textF = textF + text + " ";
-                                    imageTextTV.setText(textF);
                                     for (Text.Line line: block.getLines()) {
                                         // ...
                                         for (Text.Element element: line.getElements()) {
-                                            // ...
+                                            String text = element.getText();
+                                            Log.e(TAG,text);
+                                            TextView imageTextTV = findViewById(R.id.imageTextTV);
+                                            if (text.length()==3 && (!months.contains(text))) {
+                                                textF = textF + text + " ";
+                                                platenum = textF;
+                                            }
+                                            imageTextTV.setText("Detected Number: " + textF);
                                         }
                                     }
                                 }
