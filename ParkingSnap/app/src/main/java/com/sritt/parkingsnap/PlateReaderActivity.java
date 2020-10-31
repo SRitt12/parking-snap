@@ -48,7 +48,7 @@ public class PlateReaderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plate_reader);
         Vehicle test = new Vehicle("TestF", "TestL","XD1E0W", "2020", "Test", "Test","Red");
-        ListActivity.vehicles.put("XD1E0W", test);
+        ListActivity.getSingleton().put("XD1E0W", test);
         int requestCode = 1;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED);
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, requestCode);
@@ -59,7 +59,7 @@ public class PlateReaderActivity extends AppCompatActivity {
     }
 
     public void checkPlate(View view){
-        if(ListActivity.vehicles.containsKey(platenum)) {
+        if(ListActivity.getSingleton().containsKey(platenum)) {
             Context context = getApplicationContext();
             CharSequence text = "Plate " + platenum + "is in the database";
             int duration = Toast.LENGTH_SHORT;
@@ -147,7 +147,7 @@ public class PlateReaderActivity extends AppCompatActivity {
                                                 textF = textF + text + " ";
                                                 platenum = textF;
                                             }
-                                            imageTextTV.setText("Detected Number: " + textF);
+                                            imageTextTV.setText("Detected Number: " + platenum);
                                         }
                                     }
                                 }
