@@ -1,13 +1,17 @@
 package com.sritt.parkingsnap;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class NewVehicleActivity extends AppCompatActivity {
@@ -59,7 +63,21 @@ public class NewVehicleActivity extends AppCompatActivity {
 
                 if (valid) {
                     Vehicle v = new Vehicle(firstName.getText().toString(), lastName.getText().toString(), plateNum.getText().toString(), year.getText().toString(), make.getText().toString(), model.getText().toString(), color.getText().toString());
-                    ListActivity.vehicles.put(plateNum.getText().toString(), v);
+
+
+                    Intent intent = new Intent(NewVehicleActivity.this, ListActivity.class);
+                    intent.putExtra("vehicle",v);
+                    intent.putExtra("firstName",  v.getFirstName());
+                    intent.putExtra("lastName",  v.getLastName());
+                    intent.putExtra("licence", v.getLicence());
+                    intent.putExtra("make",  v.getMake());
+                    intent.putExtra("model",  v.getModel());
+                    intent.putExtra("color",v.getColor());
+                    intent.putExtra("year", v.getYear());
+                    startActivity(intent);
+
+
+                    startActivity(intent);
 
 
                 }
