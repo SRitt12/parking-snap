@@ -47,13 +47,10 @@ public class PlateReaderActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plate_reader);
-        Vehicle test = new Vehicle("TestF", "TestL","XD1E0W", "2020", "Test", "Test","Red");
 
         // to add a vehicle to the database without using the register button
         //test.addToFirebase();
 
-
-        ListActivity.getSingleton().put("XD1E0W", test);
         int requestCode = 1;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED);
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, requestCode);

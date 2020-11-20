@@ -42,6 +42,7 @@ public class NewVehicleActivity extends AppCompatActivity {
         EditText year = findViewById(R.id.yearET);
         Button registerBTN = findViewById(R.id.registerBTN);
 
+        plateNum.setText(PlateReaderActivity.getPlatenum());
 
         registerBTN.setOnClickListener(new View.OnClickListener() {
             @Override
