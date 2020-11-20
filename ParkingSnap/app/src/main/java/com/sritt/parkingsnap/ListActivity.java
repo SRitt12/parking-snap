@@ -1,50 +1,38 @@
 package com.sritt.parkingsnap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public class ListActivity extends AppCompatActivity {
     ListView listView;
+    ArrayList<String> arrayList = new ArrayList<>();
     private static HashMap<String, Vehicle> vehicles;
-
+    DatabaseReference reference;
 
     public static HashMap getSingleton() {
         if (vehicles == null) {
             vehicles = new HashMap<>();
-            vehicles.put("CV8U3A", new Vehicle("Lunduk", "Sherpa", "CV8U3A", "2022", "Honda", "Civic", "Black"));
-            vehicles.put("P0IU98", new Vehicle("Samuel", "Ritter", "P0IU98", "2021", "Dodge", "Charger", "Tan"));
-
-
         }
+        vehicles.remove(null);
         return vehicles;
     }
-
-
-
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +40,7 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         listView = (ListView) findViewById(R.id.vehicleLv);
-        ArrayList<String> arrayList = new ArrayList<>();
+
 
         Intent intent = getIntent();
         String firstName = intent.getStringExtra("firstName");
@@ -80,6 +68,27 @@ public class ListActivity extends AppCompatActivity {
         }
         ArrayAdapter adp = new ArrayAdapter(this, android.R.layout.simple_list_item_1,arrayList);
         listView.setAdapter(adp);
+        reference = FirebaseDatabase.getInstance().getReference().child("Vehicles");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                vehicles.clear();
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    String retrievedData = snapshot1.getValue().toString();
+                    String [] split = retrievedData.split(",");
+                    for( int i = 0; i < split.length;i++){
+                        split[i] = split[i].trim();
+                    }
+                    arrayList.add( (new Vehicle((split[0].split("="))[1],(split[1].split("="))[1],(split[2].split("="))[1],(split[4].split("="))[1],(split[6].split("="))[1].substring(0,(split[6].split("="))[1].length()-1),(split[5].split("="))[1],(split[3]).split("=")[1]).toString()));
+                }
+                adp.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
