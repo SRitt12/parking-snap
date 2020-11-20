@@ -31,7 +31,13 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 
-import java.net.Inet4Address;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+
 import java.util.ArrayList;
 
 public class PlateReaderActivity extends AppCompatActivity {
@@ -41,12 +47,12 @@ public class PlateReaderActivity extends AppCompatActivity {
         return platenum;
     }
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plate_reader);
+
 
         // to add a vehicle to the database without using the register button
         //test.addToFirebase();
@@ -60,19 +66,31 @@ public class PlateReaderActivity extends AppCompatActivity {
         dispatchTakePictureIntent();
     }
 
-    public void checkPlate(View view){
-        if(ListActivity.getSingleton().containsKey(platenum)) {
-            Context context = getApplicationContext();
-            CharSequence text = "Plate " + platenum + "is in the database";
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
 
-        }
-        else{
-            PlateDialogFragment plateDF = new PlateDialogFragment();
-            plateDF.show(getSupportFragmentManager(), "TAG");
-        }
+    public void checkPlate(View view){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Vehicles");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange (@NonNull DataSnapshot snapshot){
+                if(snapshot.child(platenum).exists()) {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Plate " + platenum + "is in the database";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+
+                }
+                else{
+                    PlateDialogFragment plateDF = new PlateDialogFragment();
+                    plateDF.show(getSupportFragmentManager(), "TAG");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
