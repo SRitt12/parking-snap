@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "963499309672",
+    "firebase_url": "https://paringsnap.firebaseio.com",
+    "project_id": "paringsnap",
+    "storage_bucket": "paringsnap.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963499309672:android:62453b335acf548a88d9dd",
+        "android_client_info": {
+          "package_name": "com.sritt.parkingsnap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963499309672-ahgb02csaka7lq01oe0id3jireh5d04f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7qzNi3ZWkboIz4kEDBGTHJXNYSyXXmNU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963499309672-ahgb02csaka7lq01oe0id3jireh5d04f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
