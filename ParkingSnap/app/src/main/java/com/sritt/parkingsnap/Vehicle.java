@@ -1,8 +1,11 @@
 package com.sritt.parkingsnap;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 
 public class Vehicle implements Serializable {
+
     String firstName;
     String lastName;
     String licence;
@@ -79,5 +82,9 @@ public class Vehicle implements Serializable {
 
     public String toString(){
         return("Name: "+ firstName+" "+lastName+"\nLicense Plate Number: "+licence+"\nVehicle: "+make+" "+model+" "+year+"\nColor: "+color);
+    }
+
+    public void addToFirebase(){
+        FirebaseDatabase.getInstance().getReference("Vehicles").child(this.getLicence()).setValue(this);
     }
 }
