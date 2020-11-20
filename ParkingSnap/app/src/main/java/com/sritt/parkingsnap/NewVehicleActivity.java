@@ -72,14 +72,6 @@ public class NewVehicleActivity extends AppCompatActivity {
 
 
                     Intent intent = new Intent(NewVehicleActivity.this, ListActivity.class);
-                    intent.putExtra("vehicle",v);
-                    intent.putExtra("firstName",  v.getFirstName());
-                    intent.putExtra("lastName",  v.getLastName());
-                    intent.putExtra("licence", v.getLicence());
-                    intent.putExtra("make",  v.getMake());
-                    intent.putExtra("model",  v.getModel());
-                    intent.putExtra("color",v.getColor());
-                    intent.putExtra("year", v.getYear());
                     startActivity(intent);
                     firebaseInsert(firstName.getText().toString(), lastName.getText().toString(), plateNum.getText().toString(), year.getText().toString(), make.getText().toString(), model.getText().toString(), color.getText().toString());
 
