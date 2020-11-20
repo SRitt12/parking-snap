@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "959992496615",
+    "firebase_url": "https://parking-database-8bb5e.firebaseio.com",
+    "project_id": "parking-database-8bb5e",
+    "storage_bucket": "parking-database-8bb5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959992496615:android:3723be2a55ef67a9363d42",
+        "android_client_info": {
+          "package_name": "com.sritt.parkingsnap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959992496615-4urcvijofhrka6tue8r0onbjuj2h84ia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-Kz4zE_WDxYdVRcRQhrwxh_rrNb5MzVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959992496615-4urcvijofhrka6tue8r0onbjuj2h84ia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
