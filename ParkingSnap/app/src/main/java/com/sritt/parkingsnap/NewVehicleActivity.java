@@ -11,10 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class NewVehicleActivity extends AppCompatActivity {
+    FirebaseDatabase database;
+    DatabaseReference reference;
 
     public boolean validate(String s){
         if(s.isEmpty()){
@@ -75,9 +80,8 @@ public class NewVehicleActivity extends AppCompatActivity {
                     intent.putExtra("color",v.getColor());
                     intent.putExtra("year", v.getYear());
                     startActivity(intent);
+                    firebaseInsert(firstName.getText().toString(), lastName.getText().toString(), plateNum.getText().toString(), year.getText().toString(), make.getText().toString(), model.getText().toString(), color.getText().toString());
 
-
-                    startActivity(intent);
 
 
                 }
@@ -86,6 +90,13 @@ public class NewVehicleActivity extends AppCompatActivity {
 
 
         }
+
+    public void firebaseInsert(String firstName, String lastName, String licence, String year, String make, String model, String color){
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("Vehicles");
+        Vehicle vehicle = new Vehicle( firstName, lastName, licence, year, make, model, color);
+        reference.child(licence).setValue(vehicle);
+    }
 
 
 
