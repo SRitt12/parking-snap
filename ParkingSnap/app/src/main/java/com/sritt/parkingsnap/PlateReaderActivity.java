@@ -52,26 +52,24 @@ public class PlateReaderActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plate_reader);
-
-
-        // to add a vehicle to the database without using the register button
-        //test.addToFirebase();
-
         int requestCode = 1;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED);
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, requestCode);
     }
-    // onClick for button
+    // onClick for camera button
     public void openCam (View view){
         dispatchTakePictureIntent();
     }
 
-
+    /* onClick for check plate button, checks recognized text
+       against database and responds appropriately */
     public void checkPlate(View view){
+        // create database reference and attach event listener
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Vehicles");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange (@NonNull DataSnapshot snapshot){
+                // if the plate number is in the database, display appropriate toast message
                 if(snapshot.child(platenum).exists()) {
                     Context context = getApplicationContext();
                     CharSequence text = "Plate " + platenum + "is in the database";
@@ -80,6 +78,7 @@ public class PlateReaderActivity extends AppCompatActivity {
                     toast.show();
 
                 }
+                // if the plate number is not in the database, display the add vehicle dialog
                 else{
                     PlateDialogFragment plateDF = new PlateDialogFragment();
                     plateDF.show(getSupportFragmentManager(), "TAG");
@@ -93,11 +92,12 @@ public class PlateReaderActivity extends AppCompatActivity {
         });
     }
 
-
+    //onClick function for new vehicle button
     public void toNewVehicle(View view){
         Intent tonNewVehicleIntent = new Intent(this, NewVehicleActivity.class);
         startActivity(tonNewVehicleIntent);
     }
+    // onClick function for list button
     public void toList(View view){
         Intent toListIntent = new Intent(this, ListActivity.class);
         startActivity(toListIntent);
@@ -127,12 +127,10 @@ public class PlateReaderActivity extends AppCompatActivity {
             imageView.setImageBitmap(imageBitmap);
             image = InputImage.fromBitmap(imageBitmap, 0);
             recognizeText(image);
-            //processTextBlock(re);
         }
     }
-
-    // TODO create models for different states
     private void recognizeText(InputImage image) {
+        // To filter out state abbreviations
         ArrayList <String> months = new ArrayList<String>();
         months.add("JAN");
         months.add("FEB");
@@ -158,15 +156,18 @@ public class PlateReaderActivity extends AppCompatActivity {
                                     Rect boundingBox = block.getBoundingBox();
                                     Point[] cornerPoints = block.getCornerPoints();
                                     for (Text.Line line: block.getLines()) {
-                                        // ...
+                                        //Process each element and get the license number
                                         for (Text.Element element: line.getElements()) {
                                             String text = element.getText();
                                             Log.e(TAG,text);
                                             TextView imageTextTV = findViewById(R.id.imageTextTV);
+                                            /*combine two strings that are 3 digits and not a state
+                                              to form the plate number*/
                                             if (text.length()==3 && (!months.contains(text))) {
                                                 textF = textF + text + " ";
                                                 platenum = textF;
                                             }
+                                            //display the recognized plate number
                                             imageTextTV.setText("Detected Number: " + platenum);
                                         }
                                     }

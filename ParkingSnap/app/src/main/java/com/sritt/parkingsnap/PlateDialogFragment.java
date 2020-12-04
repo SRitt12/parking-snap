@@ -31,9 +31,9 @@ public class PlateDialogFragment extends DialogFragment {
         builder.setMessage(plate + " is not in the database, would you like to add it?");
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Intent curtainIntent = new Intent(getActivity(), NewVehicleActivity.class);
-                //curtainIntent.putExtra(plate, plate);
-                startActivity(curtainIntent);
+                // send the user to the new vehicle activity
+                Intent vehicleIntent = new Intent(getActivity(), NewVehicleActivity.class);
+                startActivity(vehicleIntent);
             }
         })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
